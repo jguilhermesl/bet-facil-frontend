@@ -1,7 +1,7 @@
 import { GameResultFlag } from '@/components/layouts/game-result-flag';
 import { Paragraph } from '@/components/ui/paragraph';
 import { TeamData } from '@/models/GameDetailResponse';
-import { getResultVED } from '@/utils/getResultVED';
+import { getResultVED } from '@/utils/get-result-ved';
 
 export const TeamLastGames = ({ team }: { team?: TeamData }) => {
   return (

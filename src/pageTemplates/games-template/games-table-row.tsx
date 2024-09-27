@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Game } from '@/models/Game';
+import { getStatusLabel } from '@/utils/get-status-label';
+import clsx from 'clsx';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -15,7 +17,15 @@ export const GamesTableRow = ({ game }: IGamesTableRowProps) => {
     <TableRow>
       <TableCell className="font-mono">{game.flashScoreId}</TableCell>
       <TableCell className="font-medium">{game?.title || '-'}</TableCell>
-      <TableCell className="font-bold text-orange-500">{game.status}</TableCell>
+      <TableCell
+        className={clsx('font-bold', {
+          'text-green-600': game?.status === 'completed',
+          'text-red-700': game?.status === 'error',
+          'text-orange-600': game?.status === 'processing',
+        })}
+      >
+        {getStatusLabel(game?.status)}
+      </TableCell>
       <TableCell>
         <Button
           variant="outline"

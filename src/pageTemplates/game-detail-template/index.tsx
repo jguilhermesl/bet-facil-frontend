@@ -1,16 +1,17 @@
 'use client';
 import { getGameDetail } from '@/api/games/get-game-detail';
-import { GameResultFlag } from '@/components/layouts/game-result-flag';
 import { PrivateLayout } from '@/components/layouts/private-layout';
 import { Heading } from '@/components/ui/heading';
-import { Paragraph } from '@/components/ui/paragraph';
-import { TeamData } from '@/models/GameDetailResponse';
-import { getResultVED } from '@/utils/getResultVED';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { TeamLastGames } from './team-last-games';
 import { Card } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
+import { Button } from '@/components/ui/button';
+import { Paragraph } from '@/components/ui/paragraph';
+import { ResultBet } from './result-bet';
+import { queryClient } from '@/services/react-query';
+import { generateBets } from '@/api/games/generate-bets';
 
 export const GameDetailTemplate = () => {
   const { id } = useParams();
@@ -19,6 +20,26 @@ export const GameDetailTemplate = () => {
     queryFn: () => getGameDetail({ gameId: id as string }),
     queryKey: ['game-detail', id],
   });
+
+  const { mutateAsync: addGameFn, isPending: betsIsPending } = useMutation({
+    mutationFn: generateBets,
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ['game-detail', id],
+      });
+    },
+  });
+
+  const handleGenerateBet = () => {
+    try {
+      addGameFn({
+        gameId: id as string,
+      });
+    } catch (err) {
+      console.log(err);
+      alert('Algo deu errado');
+    }
+  };
 
   const gameDetail = gameData?.data;
 
@@ -47,8 +68,43 @@ export const GameDetailTemplate = () => {
                   <TeamLastGames team={gameDetail?.teamHomeData} />
                   <TeamLastGames team={gameDetail?.teamAwayData} />
                 </div>
-                <Card className="m-6 p-4">
-                  <Heading>GPT Palpites</Heading>
+                <Card className="m-6 p-4 w-full flex flex-col items-center">
+                  {betsIsPending ? (
+                    <Spinner />
+                  ) : (
+                    <>
+                      <header className="flex items-center justify-between w-full">
+                        <Heading>GPT Palpites</Heading>
+                        <Button onClick={handleGenerateBet}>Gerar bet</Button>
+                      </header>
+                      <div className="flex flex-col max-w-2/3 mt-6">
+                        {gameDetail?.bets.map((bet, index) => {
+                          return (
+                            <div className="flex flex-col border p-4 rounded-lg">
+                              <div className="flex items-center justify-between">
+                                <Paragraph className="font-bold">
+                                  Bet {index + 1}
+                                </Paragraph>
+                                <ResultBet result={bet.result} />
+                              </div>
+                              <div className="flex flex-row text-start gap-6">
+                                <Paragraph className="font-bold">
+                                  Bet:
+                                </Paragraph>
+                                <Paragraph>{bet.title}</Paragraph>
+                              </div>
+                              <div className="flex flex-row text-start gap-6">
+                                <Paragraph className="font-bold">
+                                  Razão:
+                                </Paragraph>
+                                <Paragraph>{bet.reason}</Paragraph>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 </Card>
               </div>
             </section>

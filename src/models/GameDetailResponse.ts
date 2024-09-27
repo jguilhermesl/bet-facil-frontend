@@ -1,3 +1,5 @@
+import { Bet } from "./Bet";
+
 export interface TeamData {
   mediaEscanteios: string;
   desvioEscanteios: string;
@@ -48,4 +50,5 @@ export interface TeamData {
 export interface GameDetailResponse {
   teamHomeData: TeamData;
   teamAwayData: TeamData;
+  bets: Bet[]
 }

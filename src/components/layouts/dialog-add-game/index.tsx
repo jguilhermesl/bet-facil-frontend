@@ -62,13 +62,17 @@ export const DialogAddGame = () => {
           className="w-full"
         />
 
-        <Button
-          type="submit"
-          className="bg-primary ml-auto mt-6"
-          disabled={isPending}
-        >
-          {isPending ? <Spinner /> : 'Iniciar processamento'}
-        </Button>
+        {isPending ? (
+          <Spinner />
+        ) : (
+          <Button
+            type="submit"
+            className="bg-primary ml-auto mt-6"
+            disabled={isPending}
+          >
+            Iniciar processamento
+          </Button>
+        )}
       </form>
     </DialogContent>
   );

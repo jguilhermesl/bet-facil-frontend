@@ -3,7 +3,7 @@ import { GameStats } from "./GameStats";
 enum Status {
   processing = "processing",
   completed = "completed",
-  cancelled = "cancelled"
+  cancelled = "error"
 }
 
 export interface Game {
