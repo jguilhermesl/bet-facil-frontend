@@ -68,7 +68,7 @@ export const GameDetailTemplate = () => {
                   <TeamLastGames team={gameDetail?.teamHomeData} />
                   <TeamLastGames team={gameDetail?.teamAwayData} />
                 </div>
-                <Card className="m-6 p-4 w-full flex flex-col items-center">
+                <Card className="m-6 p-4 w-1/2 flex flex-col items-center">
                   {betsIsPending ? (
                     <Spinner />
                   ) : (

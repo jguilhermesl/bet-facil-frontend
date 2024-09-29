@@ -29,14 +29,14 @@ export const PrivateLayout = ({
             <Link href="/">
               <Paragraph className="font-medium">Jogos</Paragraph>
             </Link>
-            <Link href="/">
+            <Link href="/bets">
               <Paragraph className="font-medium">Bets</Paragraph>
             </Link>
           </div>
         </div>
         <div className="h-10 w-10 rounded-full object-cover bg-emerald-700" />
       </div>
-      <div className="flex flex-col relative py-12 w-full px-4 md:px-40">
+      <div className="flex flex-col relative py-12 w-full px-4 md:px-20">
         <Heading>{title}</Heading>
         <Paragraph>{description}</Paragraph>
         <div className="mt-12 w-full">{children}</div>
