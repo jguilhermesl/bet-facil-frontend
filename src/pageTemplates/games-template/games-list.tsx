@@ -33,6 +33,7 @@ export const GamesList = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Criado em</TableHead>
                 <TableHead>Id no FlashScore</TableHead>
                 <TableHead>Jogo</TableHead>
                 <TableHead>Status</TableHead>

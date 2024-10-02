@@ -23,5 +23,5 @@ export interface Game {
       classification: any
     }
   };
-  createdAt?: Date;
+  createdAt?: string;
 }

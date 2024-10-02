@@ -5,6 +5,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Game } from '@/models/Game';
 import { queryClient } from '@/services/react-query';
+import { formatDate } from '@/utils/format-date';
 import { getStatusLabel } from '@/utils/get-status-label';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
@@ -39,6 +40,9 @@ export const GamesTableRow = ({ game }: IGamesTableRowProps) => {
 
   return (
     <TableRow>
+      <TableCell className="font-mono">
+        {formatDate(new Date(game?.createdAt || ''))}
+      </TableCell>
       <TableCell className="font-mono">{game.flashScoreId}</TableCell>
       <TableCell className="font-medium">{game?.title || '-'}</TableCell>
       <TableCell

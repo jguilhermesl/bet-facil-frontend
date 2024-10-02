@@ -8,6 +8,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Bet } from '@/models/Bet';
 import { queryClient } from '@/services/react-query';
+import { formatDate } from '@/utils/format-date';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { CheckCircle, Edit, Trash } from 'lucide-react';
@@ -80,10 +81,19 @@ export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
 
   return (
     <TableRow>
-      <TableCell className="font-mono w-[20%]">{bet?.game.title}</TableCell>
-      <TableCell className="font-medium">{bet?.title || '-'}</TableCell>
-      <TableCell className="font-medium">{bet?.reason || '-'}</TableCell>
-      <TableCell className={'font-bold min-w-[170px]'}>
+      <TableCell className="font-mono max-w-[150px]">
+        {formatDate(new Date(bet?.createdAt || ''))}
+      </TableCell>
+      <TableCell className="font-mono max-w-[150px]">
+        {bet?.game.title}
+      </TableCell>
+      <TableCell className="font-medium max-w-[100px]">
+        {bet?.title || '-'}
+      </TableCell>
+      <TableCell className="font-medium max-w-[300px] text-xs">
+        {bet?.reason || '-'}
+      </TableCell>
+      <TableCell className={'font-bold max-w-[100px]'}>
         <SelectField
           className="!text-white"
           triggerClassName={clsx({
@@ -100,7 +110,7 @@ export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
           onChange={handleUpdateStatus}
         />
       </TableCell>
-      <TableCell className={'font-bold min-w-[170px]'}>
+      <TableCell className={'font-bold min-w-[100px]'}>
         {isEditing ? (
           <Input value={odd || ''} onChange={(e) => setOdd(e.target.value)} />
         ) : (
