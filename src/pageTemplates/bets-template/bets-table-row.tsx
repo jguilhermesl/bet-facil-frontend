@@ -1,8 +1,10 @@
 import { deleteBet } from '@/api/bets/delete-bet';
 import { updateBet } from '@/api/bets/update-bet';
+import { addUserBet } from '@/api/user-bets/add-user-bet';
 import { SelectField } from '@/components/layouts/select-field';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Paragraph } from '@/components/ui/paragraph';
 import { Select } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 import { TableCell, TableRow } from '@/components/ui/table';
@@ -20,7 +22,6 @@ interface IBetsTableRowProps {
 
 export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [odd, setOdd] = useState<string | number | null>(bet?.odd || null);
 
   const { mutateAsync: updateBetFn, isPending } = useMutation({
     mutationFn: updateBet,
@@ -46,24 +47,21 @@ export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
     },
   });
 
+  const { mutateAsync: addUserBetFn, isPending: isAdding } = useMutation({
+    mutationFn: addUserBet,
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ['bets-management'],
+      });
+    },
+  });
+
   const handleUpdateStatus = async (result: string) => {
     try {
       await updateBetFn({
         betId: bet.id,
         result,
       });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleUpdateOdd = async () => {
-    try {
-      await updateBetFn({
-        betId: bet.id,
-        odd: odd as string,
-      });
-      setIsEditing(false);
     } catch (err) {
       console.log(err);
     }
@@ -79,11 +77,18 @@ export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
     }
   };
 
+  const handleAddToBetsManagement = async () => {
+    try {
+      await addUserBetFn({
+        betId: bet.id,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <TableRow>
-      <TableCell className="font-mono max-w-[150px]">
-        {formatDate(new Date(bet?.createdAt || ''))}
-      </TableCell>
       <TableCell className="font-mono max-w-[150px]">
         {bet?.game.title}
       </TableCell>
@@ -94,54 +99,29 @@ export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
         {bet?.reason || '-'}
       </TableCell>
       <TableCell className={'font-bold max-w-[100px]'}>
-        <SelectField
-          className="!text-white"
-          triggerClassName={clsx({
-            'bg-green-600': bet?.result === 'green',
-            'bg-red-700': bet?.result === 'red',
-            'bg-slate-600': bet?.result === 'progress',
-          })}
-          value={bet?.result}
-          choices={[
-            { label: 'GREEN', value: 'green' },
-            { label: 'RED', value: 'red' },
-            { label: 'IN PROGRESS', value: 'progress' },
-          ]}
-          onChange={handleUpdateStatus}
-        />
+        <div
+          className={clsx(
+            'flex py-2 px-4 items-center justify-center rounded-lg',
+            {
+              'bg-green-600': bet?.result === 'green',
+              'bg-red-700': bet?.result === 'red',
+              'bg-slate-600': bet?.result === 'progress',
+            }
+          )}
+        >
+          <Paragraph className="!text-white !font-bold">
+            {bet?.result.toUpperCase()}
+          </Paragraph>
+        </div>
       </TableCell>
-      <TableCell className={'font-bold min-w-[100px]'}>
-        {isEditing ? (
-          <Input value={odd || ''} onChange={(e) => setOdd(e.target.value)} />
-        ) : (
-          bet?.odd || '-'
-        )}
-      </TableCell>
+
       <TableCell>
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              if (isEditing) {
-                handleUpdateOdd();
-              } else {
-                setIsEditing(true);
-              }
-            }}
-          >
-            {isEditing ? (
-              isPending ? (
-                <Spinner />
-              ) : (
-                <CheckCircle className="h-3 w-3" />
-              )
-            ) : (
-              <Edit className="h-3 w-3" />
-            )}
-          </Button>
           <Button variant="outline" size="icon" onClick={handleDeleteBet}>
             {isDeleting ? <Spinner /> : <Trash className="h-3 w-3" />}
+          </Button>
+          <Button variant="outline" onClick={handleAddToBetsManagement}>
+            {isAdding ? <Spinner /> : 'Adicionar na Gestão'}
           </Button>
         </div>
       </TableCell>

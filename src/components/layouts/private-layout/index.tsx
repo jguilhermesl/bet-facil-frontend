@@ -26,11 +26,17 @@ export const PrivateLayout = ({
             <Heading className="text-green-600 text-2xl">bet.facil</Heading>
           </Link>
           <div className="flex items-center gap-8">
-            <Link href="/">
+            <Link href="/games">
               <Paragraph className="font-medium">Jogos</Paragraph>
             </Link>
             <Link href="/bets">
               <Paragraph className="font-medium">Bets</Paragraph>
+            </Link>
+            <Link href="/bets-management">
+              <Paragraph className="font-medium">Gestão</Paragraph>
+            </Link>
+            <Link href="/reports">
+              <Paragraph className="font-medium">Relatórios</Paragraph>
             </Link>
           </div>
         </div>

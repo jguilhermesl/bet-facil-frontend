@@ -1,23 +1,20 @@
-import Image from 'next/image';
 import {
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useState } from 'react';
 import { useFormik } from 'formik';
 import { Heading } from '@/components/ui/heading';
 import { Button } from '@/components/ui/button';
 import { FormInputField } from '@/components/form-input-field';
 import { useMutation } from '@tanstack/react-query';
-import { addGame } from '@/api/games/add-game';
 import { queryClient } from '@/services/react-query';
 import { Spinner } from '@/components/ui/spinner';
+import { addUserGame } from '@/api/user-games/add-user-game';
 
 export const DialogAddGame = () => {
-  const { mutateAsync: addGameFn, isPending } = useMutation({
-    mutationFn: addGame,
+  const { mutateAsync: addUserGameFn, isPending } = useMutation({
+    mutationFn: addUserGame,
     onSuccess() {
       queryClient.invalidateQueries({
         queryKey: ['games'],
@@ -27,7 +24,7 @@ export const DialogAddGame = () => {
 
   const handleAddGame = () => {
     try {
-      addGameFn({
+      addUserGameFn({
         gameId: values.flashScoreId,
       });
     } catch (err) {

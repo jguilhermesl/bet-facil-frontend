@@ -33,12 +33,10 @@ export const BetsList = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Criado em</TableHead>
                 <TableHead>Jogo</TableHead>
                 <TableHead>Palpite</TableHead>
                 <TableHead>Explicacao</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Odd</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>

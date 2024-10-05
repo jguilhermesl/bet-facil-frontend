@@ -40,9 +40,6 @@ export const GamesTableRow = ({ game }: IGamesTableRowProps) => {
 
   return (
     <TableRow>
-      <TableCell className="font-mono">
-        {formatDate(new Date(game?.createdAt || ''))}
-      </TableCell>
       <TableCell className="font-mono">{game.flashScoreId}</TableCell>
       <TableCell className="font-medium">{game?.title || '-'}</TableCell>
       <TableCell

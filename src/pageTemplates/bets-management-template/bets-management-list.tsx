@@ -5,26 +5,26 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { GamesTableRow } from './games-table-row';
+import { BetsManagementTableRow } from './bets-management-table-row';
 import { useQuery } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
 import { Paragraph } from '@/components/ui/paragraph';
-import { fetchUserGames } from '@/api/user-games/fetch-user-games';
+import { fetchUserBets } from '@/api/user-bets/fetch-user-bets';
 
-export const GamesList = () => {
-  const { data: gamesData, isPending } = useQuery({
-    queryFn: () => fetchUserGames({}),
-    queryKey: ['games'],
+export const BetsManagementList = () => {
+  const { data: userBetsData, isPending } = useQuery({
+    queryFn: () => fetchUserBets({}),
+    queryKey: ['userBets'],
   });
 
-  const games = gamesData?.data || [];
-  const gamesIsEmpty = games.length === 0;
+  const userBets = userBetsData?.data || [];
+  const userBetsIsEmpty = userBets.length === 0;
 
   return (
     <div className="items-center flex justify-center w-full">
       {isPending ? (
         <Spinner />
-      ) : gamesIsEmpty ? (
+      ) : userBetsIsEmpty ? (
         <div>
           <Paragraph>Sem resultados.</Paragraph>
         </div>
@@ -33,15 +33,17 @@ export const GamesList = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Id no FlashScore</TableHead>
+                <TableHead>Criado em</TableHead>
                 <TableHead>Jogo</TableHead>
+                <TableHead>Palpite</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Odd</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {games.map((game, i) => {
-                return <GamesTableRow game={game} key={i} />;
+              {userBets.map((userBet, i) => {
+                return <BetsManagementTableRow userBet={userBet} key={i} />;
               })}
             </TableBody>
           </Table>
