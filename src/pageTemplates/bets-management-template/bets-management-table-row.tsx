@@ -1,3 +1,5 @@
+import { updateBet } from '@/api/bets/update-bet';
+import { updateUserBet } from '@/api/user-bets/update-user-bet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Paragraph } from '@/components/ui/paragraph';
@@ -10,7 +12,7 @@ import { formatDate } from '@/utils/format-date';
 import { getStatusLabel } from '@/utils/get-status-label';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { ArrowRight, Trash } from 'lucide-react';
+import { ArrowRight, CheckCircle, Edit, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -19,30 +21,34 @@ interface IUserBetsTableRowProps {
 }
 
 export const BetsManagementTableRow = ({ userBet }: IUserBetsTableRowProps) => {
-  const [odd, setOdd] = useState<string | number | null>(
-    userBet?.bet?.odd || null
-  );
+  const [odd, setOdd] = useState<string | number | null>(userBet?.odd || null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const router = useRouter();
 
-  // const { mutateAsync: deleteBetFn, isPending: isDeleting } = useMutation({
-  //   mutationFn: deleteBet,
-  //   onSuccess() {
-  //     queryClient.invalidateQueries({
-  //       queryKey: ['games'],
-  //     });
-  //   },
-  // });
+  const { mutateAsync: updateUserBetFn, isPending } = useMutation({
+    mutationFn: updateUserBet,
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ['game-detail', userBet.bet.gameId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['bets-management'],
+      });
+    },
+  });
 
-  // const handleDeleteBet = async () => {
-  //   try {
-  //     await deleteBetFn({
-  //       gameId: game?.id,
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const handleUpdateBet = async () => {
+    try {
+      await updateUserBetFn({
+        userBetId: userBet.id,
+        odd: String(odd),
+      });
+      setIsEditing(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <TableRow>
@@ -72,13 +78,10 @@ export const BetsManagementTableRow = ({ userBet }: IUserBetsTableRowProps) => {
         </div>
       </TableCell>
       <TableCell className={'font-bold min-w-[100px]'}>
-        {false ? (
-          <Input
-            value={userBet?.bet?.odd || ''}
-            onChange={(e) => setOdd(e.target.value)}
-          />
+        {isEditing ? (
+          <Input value={odd || ''} onChange={(e) => setOdd(e.target.value)} />
         ) : (
-          userBet?.bet?.odd || '-'
+          userBet?.odd || '-'
         )}
       </TableCell>
       <TableCell>
@@ -95,7 +98,25 @@ export const BetsManagementTableRow = ({ userBet }: IUserBetsTableRowProps) => {
           </Button>
           <Button variant="outline" size="icon" onClick={() => {}}>
             <Trash className="h-3 w-3" />
-            {/* {isDeleting ? <Spinner /> : <Trash className="h-3 w-3" />} */}
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (isEditing) {
+                handleUpdateBet();
+              } else {
+                setIsEditing(true);
+              }
+            }}
+          >
+            {isPending ? (
+              <Spinner />
+            ) : isEditing ? (
+              <CheckCircle className="h-3 w-3" />
+            ) : (
+              <Edit className="h-3 w-3" />
+            )}
           </Button>
         </div>
       </TableCell>

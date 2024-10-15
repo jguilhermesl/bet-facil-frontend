@@ -21,20 +21,6 @@ interface IBetsTableRowProps {
 }
 
 export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const { mutateAsync: updateBetFn, isPending } = useMutation({
-    mutationFn: updateBet,
-    onSuccess() {
-      queryClient.invalidateQueries({
-        queryKey: ['game-detail', bet?.gameId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['bets'],
-      });
-    },
-  });
-
   const { mutateAsync: deleteBetFn, isPending: isDeleting } = useMutation({
     mutationFn: deleteBet,
     onSuccess() {
@@ -55,17 +41,6 @@ export const BetsTableRow = ({ bet }: IBetsTableRowProps) => {
       });
     },
   });
-
-  const handleUpdateStatus = async (result: string) => {
-    try {
-      await updateBetFn({
-        betId: bet.id,
-        result,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const handleDeleteBet = async () => {
     try {
