@@ -14,7 +14,7 @@ import { fetchUserBets } from '@/api/user-bets/fetch-user-bets';
 export const BetsManagementList = () => {
   const { data: userBetsData, isPending } = useQuery({
     queryFn: () => fetchUserBets({}),
-    queryKey: ['userBets'],
+    queryKey: ['bets-management'],
   });
 
   const userBets = userBetsData?.data || [];
