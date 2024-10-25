@@ -2,7 +2,10 @@ import { UserBet } from "@/models/UserBet";
 import api from "@/services/api";
 
 export interface IFetchUserBetsResponse {
-  data: UserBet[]
+  data: {
+    userBets: UserBet[],
+    stats: Stats
+  }
 }
 
 interface IFetchUserBetsProps {

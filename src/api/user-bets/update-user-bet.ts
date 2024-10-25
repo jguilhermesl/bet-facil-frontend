@@ -2,13 +2,15 @@ import api from "@/services/api";
 
 export interface IUpdateBetProps {
   userBetId: string,
-  odd?: string
+  odd?: number
+  unit?: number
 }
 
-export const updateUserBet = async ({ userBetId, odd }: IUpdateBetProps) => {
+export const updateUserBet = async ({ userBetId, odd, unit }: IUpdateBetProps) => {
   try {
     const response = await api.put("/user-bet/" + userBetId, {
-      odd
+      odd,
+      unit
     });
     return response.data;
   } catch (error: any) {

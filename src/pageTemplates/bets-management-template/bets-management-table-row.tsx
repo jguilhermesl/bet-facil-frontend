@@ -8,6 +8,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { Bet } from '@/models/Bet';
 import { UserBet } from '@/models/UserBet';
 import { queryClient } from '@/services/react-query';
+import { convertStringToNumber } from '@/utils/convert-string-to-number';
 import { formatDate } from '@/utils/format-date';
 import { getStatusLabel } from '@/utils/get-status-label';
 import { useMutation } from '@tanstack/react-query';
@@ -22,6 +23,9 @@ interface IUserBetsTableRowProps {
 
 export const BetsManagementTableRow = ({ userBet }: IUserBetsTableRowProps) => {
   const [odd, setOdd] = useState<string | number | null>(userBet?.odd || null);
+  const [unit, setUnit] = useState<string | number | null>(
+    userBet?.unit || null
+  );
   const [isEditing, setIsEditing] = useState(false);
 
   const router = useRouter();
@@ -42,7 +46,8 @@ export const BetsManagementTableRow = ({ userBet }: IUserBetsTableRowProps) => {
     try {
       await updateUserBetFn({
         userBetId: userBet.id,
-        odd: String(odd),
+        ...(odd ? { odd: convertStringToNumber(odd as string) } : {}),
+        ...(unit ? { unit: convertStringToNumber(unit as string) } : {}),
       });
       setIsEditing(false);
     } catch (err) {
@@ -53,7 +58,9 @@ export const BetsManagementTableRow = ({ userBet }: IUserBetsTableRowProps) => {
   return (
     <TableRow>
       <TableCell className="font-mono">
-        {formatDate(new Date(userBet?.createdAt || ''))}
+        {userBet?.bet?.game?.startAt
+          ? formatDate(new Date(userBet?.bet?.game?.startAt || ''))
+          : '-'}
       </TableCell>
       <TableCell className="font-medium">
         {userBet?.bet?.game?.title || '-'}
@@ -82,6 +89,13 @@ export const BetsManagementTableRow = ({ userBet }: IUserBetsTableRowProps) => {
           <Input value={odd || ''} onChange={(e) => setOdd(e.target.value)} />
         ) : (
           userBet?.odd || '-'
+        )}
+      </TableCell>
+      <TableCell className={'font-bold min-w-[100px]'}>
+        {isEditing ? (
+          <Input value={unit || ''} onChange={(e) => setUnit(e.target.value)} />
+        ) : (
+          userBet?.unit || '-'
         )}
       </TableCell>
       <TableCell>

@@ -24,4 +24,6 @@ export interface Game {
     }
   };
   createdAt?: string;
+  startAt?: string;
+  finishAt?: string;
 }

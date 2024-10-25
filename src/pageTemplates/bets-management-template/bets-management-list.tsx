@@ -17,7 +17,7 @@ export const BetsManagementList = () => {
     queryKey: ['bets-management'],
   });
 
-  const userBets = userBetsData?.data || [];
+  const userBets = userBetsData?.data.userBets || [];
   const userBetsIsEmpty = userBets.length === 0;
 
   return (
@@ -33,11 +33,12 @@ export const BetsManagementList = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Criado em</TableHead>
+                <TableHead>Inicia em</TableHead>
                 <TableHead>Jogo</TableHead>
                 <TableHead>Palpite</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Odd</TableHead>
+                <TableHead>Unidade</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>

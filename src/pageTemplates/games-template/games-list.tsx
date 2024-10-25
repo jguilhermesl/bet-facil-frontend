@@ -20,6 +20,8 @@ export const GamesList = () => {
   const games = gamesData?.data || [];
   const gamesIsEmpty = games.length === 0;
 
+  console.log(games);
+
   return (
     <div className="items-center flex justify-center w-full">
       {isPending ? (
@@ -34,6 +36,7 @@ export const GamesList = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Id no FlashScore</TableHead>
+                <TableHead>Horário</TableHead>
                 <TableHead>Jogo</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead></TableHead>

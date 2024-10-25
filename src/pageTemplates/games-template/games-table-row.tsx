@@ -41,6 +41,7 @@ export const GamesTableRow = ({ game }: IGamesTableRowProps) => {
   return (
     <TableRow>
       <TableCell className="font-mono">{game.flashScoreId}</TableCell>
+      <TableCell className="font-mono">{game?.startAt || '-'}</TableCell>
       <TableCell className="font-medium">{game?.title || '-'}</TableCell>
       <TableCell
         className={clsx('font-bold', {
