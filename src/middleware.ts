@@ -1,8 +1,6 @@
-import { PUBLIC_ROUTES } from './../../bet-facil-backend/src/constants/public-routes';
-
+import { PUBLIC_ROUTES } from './constants/public-routes';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
 import { TOKENS } from './constants/tokens';
 import { ROUTES_PATH } from './constants/route-path';
 
