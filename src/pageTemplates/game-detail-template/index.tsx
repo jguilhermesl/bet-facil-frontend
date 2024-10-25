@@ -42,6 +42,7 @@ export const GameDetailTemplate = () => {
   };
 
   const gameDetail = gameData?.data;
+  const betsIsEmpty = gameDetail?.bets.length === 0;
 
   return (
     <PrivateLayout
@@ -75,7 +76,9 @@ export const GameDetailTemplate = () => {
                     <>
                       <header className="flex items-center justify-between w-full">
                         <Heading>GPT Palpites</Heading>
-                        <Button onClick={handleGenerateBet}>Gerar bet</Button>
+                        {betsIsEmpty && (
+                          <Button onClick={handleGenerateBet}>Gerar bet</Button>
+                        )}
                       </header>
                       <div className="flex flex-col max-w-2/3 mt-6">
                         {gameDetail?.bets.map((bet, index) => {
