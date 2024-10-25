@@ -5,7 +5,8 @@ import { Heading } from '@/components/ui/heading';
 import { Input } from '@/components/ui/input';
 import { Paragraph } from '@/components/ui/paragraph';
 import { Spinner } from '@/components/ui/spinner';
-import { formatCPF } from '@/utils/format-cpf';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from '@/utils/toast';
 import { EyeClosedIcon } from '@radix-ui/react-icons';
 import { useFormik } from 'formik';
 import { Eye } from 'lucide-react';
@@ -13,17 +14,22 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 export const Login = () => {
+  const { handleSignIn } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleForm = async (values: { cpf: string; password: string }) => {
-    console.log('Dados enviados:', values);
+  const handleForm = async (values: { email: string; password: string }) => {
+    await handleSignIn({
+      email: values.email,
+      password: values.password,
+    });
+    toast('success', 'Seja bem vindo!');
   };
 
-  const { values, handleSubmit, setFieldValue, isSubmitting } = useFormik({
+  const { values, handleChange, handleSubmit, isSubmitting } = useFormik({
     validateOnChange: false,
     validateOnBlur: true,
     initialValues: {
-      cpf: '',
+      email: '',
       password: '',
     },
     onSubmit: handleForm,
@@ -43,20 +49,19 @@ export const Login = () => {
       </Paragraph>
       <form className="w-full max-w-[400px] mt-6" onSubmit={handleSubmit}>
         <Input
-          placeholder="000.000.000-00"
+          placeholder="janedoe@gmail.com"
           type="text"
-          className="!font-semibold px-4 py-[10px]"
-          onChange={(e) => setFieldValue('cpf', formatCPF(e.target.value))}
-          value={values.cpf}
+          className="px-4 py-[10px]"
+          onChange={handleChange('email')}
+          value={values.email}
           iconRight={<Eye size={16} />}
         />
         <Input
-          placeholder="******"
+          placeholder="*********"
           type={showPassword ? 'text' : 'password'}
           className="mt-[12px] px-4 py-[10px]"
-          onChange={(e) => setFieldValue('password', e.target.value)}
+          onChange={handleChange('password')}
           value={values.password}
-          maxLength={6}
           iconRight={
             showPassword ? (
               <Eye
@@ -74,7 +79,7 @@ export const Login = () => {
         />
         <Button
           disabled={isSubmitting}
-          className="!rounded-md !font-poppins !font-medium mt-2"
+          className="!rounded-md !font-poppins !font-medium mt-2 w-full"
         >
           {isSubmitting ? (
             <Spinner className="border-l-white border-t-white" />
