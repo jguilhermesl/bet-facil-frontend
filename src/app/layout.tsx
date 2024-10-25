@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Meus processos',
-  description: 'Gerencie seus clientes',
+  title: 'Bet Fácil',
+  description: 'Acerte sempre de um jeito fácil!',
 };
 
 export default function RootLayout({
