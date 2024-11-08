@@ -25,14 +25,14 @@ export const handleInterceptorErrorResponseAPI = async (
     error.message = 'Error connecting to server';
   }
 
-  if (error?.response?.data?.message === 'Unauthorized' || error?.response?.data?.error?.message === 'invalid token' || error?.response?.data?.error?.message === 'jwt malformed') {
+  if (error?.response?.data?.error?.message === 'jwt expired') {
     configResponse.sent = true;
 
-    handleSetCurrentUrl(`${window.location.pathname}${window.location.search}`);
-
-    const { refreshToken, accessToken } = handleGetAuthToken();
-
     try {
+      handleSetCurrentUrl(`${window.location.pathname}${window.location.search}`);
+
+      const { refreshToken, accessToken } = handleGetAuthToken();
+
       const { accessToken: token } = await handleRefreshToken(accessToken, refreshToken);
 
       handleSetAuthToken({ accessToken: token, refreshToken });

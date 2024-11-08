@@ -2,14 +2,14 @@ export interface GameStats {
   teamHome: {
     name: string;
     Escanteios: string;
-    goals: string;
+    gols: string;
     ['Cartões Amarelos']: string;
     ['Faltas']: string;
   };
   teamAway: {
     name: string;
     Escanteios: string;
-    goals: string;
+    gols: string;
     ['Cartões Amarelos']: string;
     ['Faltas']: string;
   };

@@ -11,10 +11,12 @@ import { EyeClosedIcon } from '@radix-ui/react-icons';
 import { useFormik } from 'formik';
 import { Eye } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export const Login = () => {
   const { handleSignIn } = useAuth();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleForm = async (values: { email: string; password: string }) => {
@@ -22,6 +24,8 @@ export const Login = () => {
       email: values.email,
       password: values.password,
     });
+
+    router.push('/');
     toast('success', 'Seja bem vindo!');
   };
 
