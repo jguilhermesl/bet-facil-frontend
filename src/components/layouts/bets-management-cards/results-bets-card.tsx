@@ -12,7 +12,8 @@ export function ResultsBetsCard({
   redsQuantity,
 }: IResultsBetsCardProps) {
   const accuracyPercentage =
-    (greensQuantity / (greensQuantity + redsQuantity)) * 100;
+    ((greensQuantity / (greensQuantity + redsQuantity)) * 100).toFixed(2) ||
+    '0';
 
   return (
     <Card className="min-w-[250px]">
